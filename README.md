@@ -1,6 +1,6 @@
 # RS3_ItemDB_Parser
 
-This repository contains a Python script that uses the Playwright library to scrape item data from the website `https://chisel.weirdgloop.org/gazproj/mrid#1`. The script navigates through the website, extracting item data and saving it in a JSON format.
+This repository contains a Python script that uses the Playwright library to scrape all RS3 item data (including unknown items, and noted items) from the website `https://chisel.weirdgloop.org/gazproj/`. The script navigates through the website, extracting item data and saving it in a JSON format.
 
 ## Features
 
