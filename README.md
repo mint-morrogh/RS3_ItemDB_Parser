@@ -6,7 +6,7 @@ This repository contains a Python script that uses the Playwright library to scr
 
 - **Automated Browsing**: Uses Playwright to navigate and interact with the website headlessly.
 - **Data Extraction**: Extracts data such as item ID, name, tradeability, if member item, value, description, and available actions.
-- **Dynamic Paging**: Searches through the item database in batches of 100 until a specified end, or when the returned data is less than determined range.
+- **Dynamic Paging**: Searches through the item database in batches of 100 until a specified end, or when all rows have been checked.
 - **Error Handling**: Stops execution if the expected number of items are not found, preventing incomplete data scraping.
 - **Output**: Saves the extracted data into `ItemDB.json`.
 
