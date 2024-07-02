@@ -4,9 +4,7 @@ from playwright.async_api import async_playwright
 import random
 import time
 
-
 # total items as of 7/2/2024 = 57098
-# this will go until the current search range returns less than 100, and then break from loop.
 item_start = 1
 item_end = 100000
 
@@ -19,9 +17,11 @@ async def open_and_interact_with_website():
         time.sleep(1)
         print("Website opened")
 
-        # uncheck "hide noted"
+        # Uncheck "hide noted" if checked
         if await page.is_checked('input#note'):
             await page.uncheck('input#note')
+            # Wait for the "hide noted" to be reflected in the DOM
+            await page.wait_for_selector("#mridbody:not(.hidenoted)")
             time.sleep(.2)
         print("Unchecked 'Hide Noted'")
 
@@ -52,14 +52,13 @@ async def open_and_interact_with_website():
 
             # Extract data
             rows = await page.query_selector_all('tr.mridrow')
-            last_id_found = False
-            for row in rows:
-                id_text = await (await row.query_selector('td.mrid-id')).text_content()
-                if id_text == str(end):
-                    last_id_found = True
+            if not rows:
+                print(f"No more items found at range {start}-{end}, exiting.")
+                break  # Break the loop if no rows are returned
 
+            for row in rows:
                 item = {
-                    'id': id_text,
+                    'id': await (await row.query_selector('td.mrid-id')).text_content(),
                     'name': await (await row.query_selector('td.mrid-name')).text_content(),
                     'tradeable': await (await row.query_selector('td.mrid-trade')).text_content(),
                     'members': await (await row.query_selector('td.mrid-mem')).text_content(),
@@ -70,15 +69,9 @@ async def open_and_interact_with_website():
                     'actions_ground': await (await row.query_selector('td.mrid-ground')).text_content()
                 }
                 data.append(item)
-            
-            if last_id_found:
-                print(f"Search Range is full for items {start}-{end}")
-            else:
-                print(f"Data collection stopped short at item ID {id_text} for range {start}-{end}, writing to JSON file")
-                break  # Stop the loop if the last ID is not found (search range returns less than 100)
 
             # implicit wait to be considerate
-            await asyncio.sleep(random.uniform(2, 4))
+            await asyncio.sleep(random.uniform(1, 2))
 
         # write to json
         with open('ItemDB.json', 'w') as json_file:
