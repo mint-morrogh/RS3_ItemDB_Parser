@@ -21,7 +21,8 @@ playwright install
 
 The data fetched by the script is saved in the ItemDB.json file within the same directory. Each entry in the JSON file represents an item with its details as described above.
 
-Configuration
+## Configuration
+
 You can adjust the following variables at the beginning of the script to change the behavior of the data scraping process:
 
 item_start: The starting ID for the item data scraping.
